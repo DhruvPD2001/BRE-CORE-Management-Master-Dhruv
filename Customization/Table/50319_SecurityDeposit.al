@@ -188,6 +188,17 @@ table 50319 "Security Deposit"
             Caption = 'Status';
             OptionMembers = Open,Posted;
         }
+        field(50181; "Tenant ID"; Code[20])
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Tenant ID';
+            Editable = false;
+        }
+        field(50182; "Posting Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+            Caption = 'Posting Date';
+        }
     }
 
 

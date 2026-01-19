@@ -52,6 +52,7 @@ codeunit 50107 "Security Deposit Posting Mgt."
 
 
 
+
         CarryForwardOutAccount := COASetup."Carried Forward Out SD";
         CarryForwardInAccount := COASetup."Carried Forward in SD";
 
@@ -75,10 +76,10 @@ codeunit 50107 "Security Deposit Posting Mgt."
         GenJnlLine."Line No." := LineNo;
         GenJnlLine."Posting Date" := Today;
         GenJnlLine."Document No." := DocNo;
-        GenJnlLine."Document Type" := GenJnlLine."Document Type"::Payment;
-        GenJnlLine."Account Type" := GenJnlLine."Account Type"::"G/L Account";
-        GenJnlLine."Account No." := TenantReceivableAccount;
-        GenJnlLine.Amount := -Amount;
+        GenJnlLine.Description := SecurityDeposit.Narration;
+        GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::Customer);
+        GenJnlLine.Validate("Account No.", SecurityDeposit."Tenant ID");
+        GenJnlLine.Validate(Amount, -Amount);
         GenJnlLine."Contract ID" := SecurityDeposit."Contract ID";
 
         GenJnlLine.Insert();
@@ -92,10 +93,10 @@ codeunit 50107 "Security Deposit Posting Mgt."
         GenJnlLine."Line No." := LineNo;
         GenJnlLine."Posting Date" := Today;
         GenJnlLine."Document No." := DocNo;
-        GenJnlLine."Document Type" := GenJnlLine."Document Type"::Payment;
-        GenJnlLine."Account Type" := GenJnlLine."Account Type"::"G/L Account";
-        GenJnlLine."Account No." := CarryForwardOutAccount;
-        GenJnlLine.Amount := Amount;
+        GenJnlLine.Description := SecurityDeposit.Narration;
+        GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::"G/L Account");
+        GenJnlLine.Validate("Account No.", CarryForwardOutAccount);
+        GenJnlLine.Validate(Amount, Amount);
         GenJnlLine."Contract ID" := SecurityDeposit."Contract ID";
         GenJnlLine.Insert();
 
@@ -108,11 +109,11 @@ codeunit 50107 "Security Deposit Posting Mgt."
         GenJnlLine."Line No." := LineNo;
         GenJnlLine."Posting Date" := Today;
         GenJnlLine."Document No." := DocNo;
-        GenJnlLine."Document Type" := GenJnlLine."Document Type"::Payment;
-        GenJnlLine."Account Type" := GenJnlLine."Account Type"::"G/L Account";
-        GenJnlLine."Account No." := CarryForwardInAccount;
-        GenJnlLine.Amount := -Amount;
-        GenJnlLine."Contract ID" := SecurityDeposit."Contract ID";
+        GenJnlLine.Description := SecurityDeposit.Narration;
+        GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::"G/L Account");
+        GenJnlLine.Validate("Account No.", CarryForwardInAccount);
+        GenJnlLine.Validate(Amount, -Amount);
+        GenJnlLine."Contract ID" := SecurityDeposit."New_Contract ID";
         GenJnlLine.Insert();
 
         // 4th Line - Tenant Receivable (+Amount)
@@ -124,11 +125,11 @@ codeunit 50107 "Security Deposit Posting Mgt."
         GenJnlLine."Line No." := LineNo;
         GenJnlLine."Posting Date" := Today;
         GenJnlLine."Document No." := DocNo;
-        GenJnlLine."Document Type" := GenJnlLine."Document Type"::Payment;
-        GenJnlLine."Account Type" := GenJnlLine."Account Type"::"G/L Account";
-        GenJnlLine."Account No." := TenantReceivableAccount;
-        GenJnlLine.Amount := Amount;
-        GenJnlLine."Contract ID" := SecurityDeposit."Contract ID";
+        GenJnlLine.Description := SecurityDeposit.Narration;
+        GenJnlLine.Validate("Account Type", GenJnlLine."Account Type"::Customer);
+        GenJnlLine.Validate("Account No.", SecurityDeposit."Tenant ID");
+        GenJnlLine.Validate(Amount, Amount);
+        GenJnlLine."Contract ID" := SecurityDeposit."New_Contract ID";
         GenJnlLine.Insert();
 
         // Now Post the Journal
